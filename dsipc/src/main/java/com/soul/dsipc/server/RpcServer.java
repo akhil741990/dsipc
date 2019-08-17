@@ -9,6 +9,9 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.soul.dsipc.rpc.RpcService;
+import com.soul.dsipc.rpc.RpcServiceImplRouter;
+
 public class RpcServer {
 
 	private String ip;
@@ -19,6 +22,8 @@ public class RpcServer {
 	private Reader reader;
 	private ConnectionRegistrar connRegistrar;
 	private BlockingQueue<SocketChannel> connRegistrarQ;
+	private RpcServiceImplRouter svcRouter;
+	
 	
 	public RpcServer(String ip, int port){
 		this.ip =  ip;
@@ -35,6 +40,7 @@ public class RpcServer {
 		listener = new Listener(listenerSelector,connRegistrarQ);
 		reader = new Reader(); // TODO : configure the number of reader Threads
 		connRegistrar = new ConnectionRegistrar(connRegistrarQ, reader.getSelector());
+		svcRouter = new RpcServiceImplRouter();
 		
 	}
 	public void start() throws IOException{
@@ -44,5 +50,9 @@ public class RpcServer {
 		listener.start();
 		reader.start();
 		connRegistrar.start();
+	}
+	
+	public void registerRpc(Class c , RpcService svc){
+		svcRouter.registerRpcService(c.getName(), svc);
 	}
 }
