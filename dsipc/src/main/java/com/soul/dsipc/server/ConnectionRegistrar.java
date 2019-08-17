@@ -6,6 +6,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.BlockingQueue;
 
+import com.soul.dsipc.server.net.RpcConnectionHandler;
+
 public class ConnectionRegistrar extends Thread implements EverRunningComponent {
 
 	private BlockingQueue<SocketChannel> connRegistrarQ;
@@ -22,7 +24,8 @@ public class ConnectionRegistrar extends Thread implements EverRunningComponent 
 				SocketChannel channel = connRegistrarQ.take();
 				readSelector.wakeup();
 				// Create a RpcConnectionHandler and add as attachment
-				channel.register(readSelector, SelectionKey.OP_READ);
+				RpcConnectionHandler handler = new RpcConnectionHandler(channel);
+				channel.register(readSelector, SelectionKey.OP_READ, handler);
 				System.out.println("Registered new connection of READ");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
