@@ -1,0 +1,5 @@
+
+
+For RPC Client Server Communication , refer the Test : TestRPCCompatibility
+
+Protobuff dependency is not resolved in hadoop-common need to fix it 
