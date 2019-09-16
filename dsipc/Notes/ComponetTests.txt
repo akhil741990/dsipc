@@ -2,4 +2,8 @@
 
 For RPC Client Server Communication , refer the Test : TestRPCCompatibility
 
-Protobuff dependency is not resolved in hadoop-common need to fix it 
+Protobuff dependency is not resolved in hadoop-common need to fix it
+
+
+
+Generate ProtoBuff classes : https://stackoverflow.com/questions/23139066/package-org-apache-hadoop-ipc-protobuf-empty 
