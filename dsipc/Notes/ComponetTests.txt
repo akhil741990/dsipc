@@ -6,4 +6,27 @@ Protobuff dependency is not resolved in hadoop-common need to fix it
 
 
 
-Generate ProtoBuff classes : https://stackoverflow.com/questions/23139066/package-org-apache-hadoop-ipc-protobuf-empty 
+Generate ProtoBuff classes : https://stackoverflow.com/questions/23139066/package-org-apache-hadoop-ipc-protobuf-empty
+
+
+Try cd to path "/hadoop-common-project/hadoop-common/src/test/proto" and execute following command:protoc --java_out=../java *.proto.  
+
+
+
+===========================
+
+Error :  sun.misc.SignalHandler is Sun proprietary API and may be removed in a future release
+
+https://stackoverflow.com/questions/13855700/suppress-javac-warning-is-internal-proprietary-api-and-may-be-removed-in-a-f
+
+Resolution : 
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+        <compilerArgument>-XDignore.symbol.file</compilerArgument>
+    </configuration>
+</plugin>
+
+===================
