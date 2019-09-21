@@ -30,3 +30,28 @@ Resolution :
 </plugin>
 
 ===================
+
+
+21/09/2019
+From the Junit Test : TestRPCCompatibility
+
+
+Proxy.ping() ---- > WritableRpcEngine.invoke()
+
+
+Need to debug how this redirection works
+
+
+Client.java:
+
+ // Format of a call on the wire:
+  // 0) Length of rest below (1 + 2)
+  // 1) RpcRequestHeader  - is serialized Delimited hence contains length
+  // 2) RpcRequest
+  //
+
+
+=====================
+
+
+
