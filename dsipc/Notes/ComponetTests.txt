@@ -71,6 +71,13 @@ Refer : http://tutorials.jenkov.com/java-reflection/dynamic-proxies.html
 
 =====================
 
+15/11/2019 : 
+
+Java Google Protopbuf tutorial :  https://developers.google.com/protocol-buffers/docs/javatutorial
+
+
+Command to generate proto classes :
+akhil@akhil-ML-box:~/ML/ds-ipc/dsipc/proto$ protoc --java_out=../src/main/java *.proto
 
 
 

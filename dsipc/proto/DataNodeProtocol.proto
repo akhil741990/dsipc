@@ -1,0 +1,48 @@
+option java_package = "com.soul.hdfs.datanode.proto";
+option java_outer_classname = "DatanodeProtocolProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+package com.soul.hdfs.datanode.proto;
+
+
+
+message DatanodeRegistrationProto {
+  required string datanodeID = 1;    // Datanode information
+  required string storageInfo = 2;  // Node information
+  required string keys = 3;   // Block keys
+  required string softwareVersion = 4;        // Software version of the DN, e.g. "2.0.0"
+}
+
+
+
+/**
+ * registration - Information of the datanode registering with the namenode
+ */
+message RegisterDatanodeRequestProto {
+  required DatanodeRegistrationProto registration = 1; // Datanode info
+}
+
+/**
+ * registration - Update registration of the datanode that successfully 
+ *                registered. StorageInfo will be updated to include new 
+ *                storage ID if the datanode did not have one in the request.
+ */
+message RegisterDatanodeResponseProto {
+  required DatanodeRegistrationProto registration = 1; // Datanode info
+}
+
+
+
+/**
+ * Protocol used from datanode to the namenode
+ * See the request and response for details of rpc call.
+ */
+service DatanodeProtocolService {
+  /**
+   * Register a datanode at a namenode
+   */
+  rpc registerDatanode(RegisterDatanodeRequestProto)
+      returns(RegisterDatanodeResponseProto);
+}
+
+

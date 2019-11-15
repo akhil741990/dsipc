@@ -22,10 +22,10 @@
  * for what changes are allowed for a *stable* .proto interface.
  */
 
-option java_package = "org.apache.hadoop.ipc.protobuf";
+option java_package = "com.soul.hadoop.common.protobuf";
 option java_outer_classname = "RpcHeaderProtos";
 option java_generate_equals_and_hash = true;
-package hadoop.common;
+package com.soul.hadoop.common.protobuf;
 
 /**
  * This is the rpc request header. It is sent with every rpc call.
