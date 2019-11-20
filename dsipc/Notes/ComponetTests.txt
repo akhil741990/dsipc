@@ -81,5 +81,18 @@ akhil@akhil-ML-box:~/ML/ds-ipc/dsipc/proto$ protoc --java_out=../src/main/java *
 
 
 
+19/11/2-19 :
+
+
+public Object invoke(Object proxy, Method method, Object[] args)
+Invoker consructs the RpcHeader from the ProtoBuf object == > private RequestHeaderProto constructRpcRequestHeader(Method method)
+args[1] == Protobuf objects
+RpcHeader and args[1] is wrapped into RpcRequestWrapper
+Client.sendRpcRequest() === > write the request on the wire
+
+
+
+
+
 
 
