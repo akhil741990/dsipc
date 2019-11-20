@@ -1,4 +1,4 @@
-package com.soul.dsipc.rpc.client;
+package com.soul.dsipc.rpc;
 
 public class ProtocolProxy<T> {
 	private Class<T> protocol;
