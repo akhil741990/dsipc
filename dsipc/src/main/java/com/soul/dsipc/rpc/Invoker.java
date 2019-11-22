@@ -2,9 +2,11 @@ package com.soul.dsipc.rpc;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.google.protobuf.Message;
+import com.soul.dsipc.rpc.client.Call;
 import com.soul.dsipc.rpc.client.RpcClient;
 import com.soul.dsipc.rpc.packet.RpcRequestWrapper;
 import com.soul.hadoop.common.protobuf.ProtobufRpcEngineProtos.RequestHeaderProto;
@@ -16,9 +18,10 @@ public class Invoker implements InvocationHandler{
 	RpcClient client;
     String protocolName;
     private final long clientProtocolVersion;
-	public Invoker(Class<?> protocol,long clientProtocolVersion){
+	public Invoker(Class<?> protocol,long clientProtocolVersion, InetSocketAddress address){
 		this.protocolName = protocol.getSimpleName();
 		this.clientProtocolVersion = clientProtocolVersion;
+		this.address = address;
 	}
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -34,7 +37,10 @@ public class Invoker implements InvocationHandler{
 		
 		RpcRequestWrapper wrapper = new RpcRequestWrapper(header, message);
 		
-		this.client.call();
+		
+		Call call = new Call(wrapper,address);
+		
+		this.client.sendRpcRequest(call);;
 				
 		
 		return null;
