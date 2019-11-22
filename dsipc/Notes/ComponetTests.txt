@@ -95,4 +95,23 @@ Client.sendRpcRequest() === > write the request on the wire
 
 
 
+22/11/2019 :
+
+1)The client program will get the ProtocolProxy to invoke methods on the RpcServer
+2)For each method call on the proxy,a new Socket Connection will be setup 
+3)A dedicated Thread to read responses for the sent request will be runing in the Background
+The the RpcRequest will be written to OutPutStream of this socket.
+ A mapping of requestId and client sockets will be maintained to co-relate the response 
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
 
