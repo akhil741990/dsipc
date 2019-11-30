@@ -8,6 +8,8 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.soul.dsipc.server.net.RpcConnectionHandler;
+
 public class Reader extends Thread implements EverRunningComponent {
 
 
@@ -32,13 +34,16 @@ public class Reader extends Thread implements EverRunningComponent {
 					try{
 						SelectionKey key = itr.next();
 						SocketChannel client = (SocketChannel) key.channel();
+						
 						if(client.isConnected()){
 							//TODO : attach an Object which has the capability to process the network Bytes
-							client.read(buffer);
-							System.out.println("Msg Recieved :" + new String(buffer.array()));
-							buffer.flip();
-							buffer.clear();
-							itr.remove();
+//							client.read(buffer);
+//							System.out.println("Msg Recieved :" + new String(buffer.array()));
+//							buffer.flip();
+//							buffer.clear();
+//							itr.remove();
+							RpcConnectionHandler connHandler =   (RpcConnectionHandler) key.attachment();
+							connHandler.readRpcRequest();
 						}
 					}catch (Exception e) {
 						System.out.println("Error :" + e.getMessage());

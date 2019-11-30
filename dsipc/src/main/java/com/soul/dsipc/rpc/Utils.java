@@ -3,6 +3,9 @@ package com.soul.dsipc.rpc;
 import java.io.DataInput;
 import java.io.IOException;
 
+import com.google.protobuf.ByteString;
+import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto;
+
 public class Utils {
 	
 	public static int readRawVarint32(DataInput in) throws IOException {
@@ -39,4 +42,11 @@ public class Utils {
 	    return result;
 	  }
 
+	
+	 public static RpcRequestHeaderProto makeRpcRequestHeader(RpcRequestHeaderProto.OperationProto operation) {
+		    RpcRequestHeaderProto.Builder result = RpcRequestHeaderProto.newBuilder();
+		    result.setRpcOp(operation).setCallId(1)
+		        .setClientId(ByteString.copyFrom("uuid".getBytes()));
+		    return result.build();
+		  }
 }

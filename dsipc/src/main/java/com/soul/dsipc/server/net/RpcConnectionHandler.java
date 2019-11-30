@@ -57,6 +57,7 @@ public class RpcConnectionHandler {
 			dataLength = dataLengthBuffer.getInt();
 			this.dataBuffer = ByteBuffer.allocate(dataLength);
 			count = this.channel.read(dataBuffer);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

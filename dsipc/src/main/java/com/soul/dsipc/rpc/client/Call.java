@@ -1,6 +1,5 @@
 package com.soul.dsipc.rpc.client;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import com.soul.dsipc.rpc.packet.Writable;
