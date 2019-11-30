@@ -1,8 +1,15 @@
 package com.soul.dsipc.server.net;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+
+import com.google.protobuf.Message;
+import com.google.protobuf.Message.Builder;
+import com.soul.dsipc.rpc.packet.RpcRequestWrapper;
+import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto;
 
 /*
  * This class will be responsible for reading the network bytes from the client
@@ -58,10 +65,33 @@ public class RpcConnectionHandler {
 			this.dataBuffer = ByteBuffer.allocate(dataLength);
 			count = this.channel.read(dataBuffer);
 			
+			final DataInputStream dis = new DataInputStream(new ByteArrayInputStream(dataBuffer.array()));
+		    final RpcRequestHeaderProto header = decodeProtoBuff(RpcRequestHeaderProto.newBuilder(), dis);
+			
+		    //TODO :  validate header
+		    
+		    RpcRequestWrapper wr = new RpcRequestWrapper();
+		    wr.readFields(dis);
+		    
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public <T extends Message> T decodeProtoBuff(Builder builder, DataInputStream is){
+		
+		try {
+		 builder.mergeDelimitedFrom(is);
+		 return (T)builder.build();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 }

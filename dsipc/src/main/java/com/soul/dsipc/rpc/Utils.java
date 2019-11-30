@@ -45,7 +45,7 @@ public class Utils {
 	
 	 public static RpcRequestHeaderProto makeRpcRequestHeader(RpcRequestHeaderProto.OperationProto operation) {
 		    RpcRequestHeaderProto.Builder result = RpcRequestHeaderProto.newBuilder();
-		    result.setRpcOp(operation).setCallId(1)
+		    result.setRpcOp(operation).setCallId(1).setRetryCount(0)
 		        .setClientId(ByteString.copyFrom("uuid".getBytes()));
 		    return result.build();
 		  }
