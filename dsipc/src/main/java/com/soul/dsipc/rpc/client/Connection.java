@@ -3,7 +3,10 @@ package com.soul.dsipc.rpc.client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.channels.Channel;
+import java.nio.channels.SocketChannel;
 
 import com.google.protobuf.ByteString;
 import com.soul.dsipc.rpc.packet.DataOutputBuffer;
@@ -12,7 +15,7 @@ import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto.Ope
 
 public class Connection {
 
-	private Socket socket;
+	private SocketChannel channel;
 	private DataInputStream in;
 	private DataOutputStream out;
 	
@@ -42,6 +45,26 @@ public class Connection {
 	      call.rpcRequest.write(d);
 	      
 	      
+	      if(setUpConnection(call.address)){
+	    	  setUpIoStreams();
+	      }else{
+	    	throw new IOException("Unable to connect to Server"); 
+	      }
 	      // Write d to socket out put stream
+	}
+	
+	private boolean setUpConnection(InetSocketAddress address) throws IOException{
+		
+		//TODO : use socket factory
+		channel = SocketChannel.open();
+		channel.configureBlocking(true);
+		channel.connect(address);
+		return channel.isConnected();
+	}
+	
+	
+	private void setUpIoStreams() throws IOException{
+		this.out = new DataOutputStream(channel.socket().getOutputStream());
+		this.in = new DataInputStream(channel.socket().getInputStream());
 	}
 }
