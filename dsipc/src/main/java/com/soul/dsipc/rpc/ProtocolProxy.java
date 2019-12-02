@@ -7,4 +7,8 @@ public class ProtocolProxy<T> {
 		this.protocol = protocol;
 		this.proxy = proxy;
 	}
+	
+	public T getProxy(){
+		return proxy;
+	}
 }

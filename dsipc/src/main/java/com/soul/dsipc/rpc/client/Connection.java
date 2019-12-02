@@ -47,6 +47,11 @@ public class Connection {
 	      
 	      if(setUpConnection(call.address)){
 	    	  setUpIoStreams();
+	    	  byte[] data = d.getData();
+              int totalLength = d.getLength();
+              out.writeInt(totalLength); // Total Length
+              out.write(data, 0, totalLength);// RpcRequestHeader + RpcRequest
+              out.flush();
 	      }else{
 	    	throw new IOException("Unable to connect to Server"); 
 	      }

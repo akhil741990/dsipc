@@ -34,10 +34,8 @@ public class RpcClient {
 	      // 2) RpcRequest
 	      //
 	      // Items '1' and '2' are prepared here. 
-	      final DataOutputBuffer d = new DataOutputBuffer();
-	      RpcRequestHeaderProto header = Utils.makeRpcRequestHeader(OperationProto.RPC_FINAL_PACKET);
-	      header.writeDelimitedTo(d);
-	      call.rpcRequest.write(d);
+		  Connection conn = new Connection();
+		  conn.sendRpcRequest(call);
 	}
 	
 	

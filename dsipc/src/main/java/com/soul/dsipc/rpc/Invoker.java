@@ -22,6 +22,7 @@ public class Invoker implements InvocationHandler{
 		this.protocolName = protocol.getSimpleName();
 		this.clientProtocolVersion = clientProtocolVersion;
 		this.address = address;
+		this.client = new RpcClient();  
 	}
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -39,7 +40,6 @@ public class Invoker implements InvocationHandler{
 		
 		
 		Call call = new Call(wrapper,address);
-		
 		this.client.sendRpcRequest(call);;
 				
 		
