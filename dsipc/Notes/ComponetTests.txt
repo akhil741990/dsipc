@@ -110,7 +110,11 @@ The the RpcRequest will be written to OutPutStream of this socket.
  
  
 
+05/12/2019 :
 
+After reading the RpcRequest on ServerSide, put it into a CallQ.
+A Server Deamon Thread will pick up the request from the Q and invoke the method
+Write an invoker on Server side which will fetch the relevant RpcServer and call the the requested method by Reflection
 
 
 
