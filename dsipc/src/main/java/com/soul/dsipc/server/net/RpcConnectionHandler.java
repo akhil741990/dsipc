@@ -59,7 +59,11 @@ public class RpcConnectionHandler {
 			if(count < 0){
 				return;
 			}
+			int version  = headerBuffer.get(0);
+			int serviceClass = headerBuffer.get(1);
 			
+			
+			dataLengthBuffer.flip();
 			//Reading data
 			dataLength = dataLengthBuffer.getInt();
 			this.dataBuffer = ByteBuffer.allocate(dataLength);

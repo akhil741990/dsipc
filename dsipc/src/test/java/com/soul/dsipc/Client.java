@@ -39,6 +39,9 @@ public class Client {
 		
 		try {
 			proxy.registerDatanode(null, request);
+			
+			System.out.println("Send Request :");
+			System.out.println("Send Request End:");
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
