@@ -10,6 +10,7 @@ import java.nio.channels.SocketChannel;
 
 import com.google.protobuf.ByteString;
 import com.soul.dsipc.rpc.packet.DataOutputBuffer;
+import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcKindProto;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto.OperationProto;
 
@@ -36,8 +37,14 @@ public class Connection {
 	      final DataOutputBuffer d = new DataOutputBuffer();
 	      
 	      RpcRequestHeaderProto.Builder result = RpcRequestHeaderProto.newBuilder();
-	      result.setRpcOp(OperationProto.RPC_FINAL_PACKET).setCallId(0)
+	      result.setRpcOp(OperationProto.RPC_FINAL_PACKET).setCallId(1)
 	          .setClientId(ByteString.copyFrom("MyClinet".getBytes()));
+	     
+	      
+	      
+//	      RpcRequestHeaderProto.Builder result = RpcRequestHeaderProto.newBuilder();
+//	      result.setRpcKind(convert(rpcKind)).setRpcOp(operation).setCallId(callId)
+//	          .setRetryCount(retryCount).setClientId(ByteString.copyFrom(uuid));
 	      
 	      
 	      RpcRequestHeaderProto header = result.build();

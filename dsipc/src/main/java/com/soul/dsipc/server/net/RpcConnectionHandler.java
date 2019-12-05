@@ -34,7 +34,7 @@ public class RpcConnectionHandler {
 		DataLength :
 		 First 4 bytes  
 		
-		Header
+		Header ============================================== ????
 		Next 3 bytes are header :
 				1st byte = version
 				2nd byte = Service class
@@ -55,12 +55,12 @@ public class RpcConnectionHandler {
 			}
 			
 			//Reading Header
-			count = this.channel.read(headerBuffer);
-			if(count < 0){
-				return;
-			}
-			int version  = headerBuffer.get(0);
-			int serviceClass = headerBuffer.get(1);
+//			count = this.channel.read(headerBuffer);
+//			if(count < 0){
+//				return;
+//			}
+//			int version  = headerBuffer.get(0);
+//			int serviceClass = headerBuffer.get(1);
 			
 			
 			dataLengthBuffer.flip();
