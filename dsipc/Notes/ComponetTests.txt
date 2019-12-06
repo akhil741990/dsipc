@@ -118,4 +118,27 @@ Write an invoker on Server side which will fetch the relevant RpcServer and call
 
 
 
+================================================================================================
+
+06/12/2019 :
+
+Need to debug : Exception in thread "Thread-3" java.lang.ClassCastException: com.soul.dsipc.server.protocol.impl.DataNodeProtocolImpl cannot be cast to com.google.protobuf.BlockingService
+	at com.soul.dsipc.rpc.RpcServiceImplRouter.run(RpcServiceImplRouter.java:49)
+
+
+Hint :
+RPC.java
+ ProtocolMetaInfoServerSideTranslatorPB xlator = 
+          new ProtocolMetaInfoServerSideTranslatorPB(this);
+      BlockingService protocolInfoBlockingService = ProtocolInfoService
+          .newReflectiveBlockingService(xlator);
+      
+==================================================================================================          
+          
+          
+
+
+
+
+
 

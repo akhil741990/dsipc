@@ -8,7 +8,7 @@ public class Server {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		RpcServer server = new RpcServer("localhost", 5555);
+		RpcServer server = RpcServer.getServerInstance("localhost", 5555);
 		
 		server.start();
 		

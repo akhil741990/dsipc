@@ -11,6 +11,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.soul.dsipc.rpc.RpcService;
 import com.soul.dsipc.rpc.RpcServiceImplRouter;
+import com.soul.dsipc.server.protocol.impl.DataNodePB;
+import com.soul.dsipc.server.protocol.impl.DataNodeProtocolImpl;
 
 public class RpcServer {
 
@@ -24,8 +26,18 @@ public class RpcServer {
 	private BlockingQueue<SocketChannel> connRegistrarQ;
 	private RpcServiceImplRouter svcRouter;
 	
+	private static RpcServer instance;
 	
-	public RpcServer(String ip, int port){
+	public static RpcServer  getServerInstance(String ip, int port){
+		
+		if(instance == null){
+			instance = new RpcServer(ip, port);
+		}
+		return instance;
+		
+	}
+	
+	private RpcServer(String ip, int port){
 		this.ip =  ip;
 		this.port = port;
 	}
@@ -41,6 +53,7 @@ public class RpcServer {
 		reader = new Reader(); // TODO : configure the number of reader Threads
 		connRegistrar = new ConnectionRegistrar(connRegistrarQ, reader.getSelector());
 		svcRouter = new RpcServiceImplRouter();
+		svcRouter.registerRpcService(DataNodePB.class.getSimpleName(), new DataNodeProtocolImpl());
 		
 	}
 	public void start() throws IOException{
@@ -50,9 +63,14 @@ public class RpcServer {
 		listener.start();
 		reader.start();
 		connRegistrar.start();
+		svcRouter.start();
+		
 	}
 	
 	public void registerRpc(Class c , RpcService svc){
 		svcRouter.registerRpcService(c.getName(), svc);
+	}
+	public  BlockingQueue<RpcCall> getQueue(){
+		return this.svcRouter.getQueue();
 	}
 }

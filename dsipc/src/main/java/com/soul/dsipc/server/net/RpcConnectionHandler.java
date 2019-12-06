@@ -9,6 +9,8 @@ import java.nio.channels.SocketChannel;
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 import com.soul.dsipc.rpc.packet.RpcRequestWrapper;
+import com.soul.dsipc.server.RpcCall;
+import com.soul.dsipc.server.RpcServer;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto;
 
 /*
@@ -77,6 +79,8 @@ public class RpcConnectionHandler {
 		    RpcRequestWrapper wr = new RpcRequestWrapper();
 		    wr.readFields(dis);
 		    
+		    RpcCall c = new RpcCall(wr, channel);
+		    RpcServer.getServerInstance(null, 0).getQueue().add(c);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
