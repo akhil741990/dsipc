@@ -137,7 +137,12 @@ RPC.java
           
           
 
+7/12/2019 :
+Server : Write Response back to client
+Client : Add mechanism in to receive the response form Server
+Add ThreadPooling in RpcSvcRouter
 
+=================================================================================================== 
 
 
 
