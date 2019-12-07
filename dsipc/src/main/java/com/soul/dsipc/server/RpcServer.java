@@ -13,6 +13,8 @@ import com.soul.dsipc.rpc.RpcService;
 import com.soul.dsipc.rpc.RpcServiceImplRouter;
 import com.soul.dsipc.server.protocol.impl.DataNodePB;
 import com.soul.dsipc.server.protocol.impl.DataNodeProtocolImpl;
+import com.soul.hdfs.datanode.proto.DatanodeProtocolProtos;
+import com.soul.hdfs.datanode.proto.DatanodeProtocolProtos.DatanodeProtocolService;
 
 public class RpcServer {
 
@@ -53,7 +55,10 @@ public class RpcServer {
 		reader = new Reader(); // TODO : configure the number of reader Threads
 		connRegistrar = new ConnectionRegistrar(connRegistrarQ, reader.getSelector());
 		svcRouter = new RpcServiceImplRouter();
-		svcRouter.registerRpcService(DataNodePB.class.getSimpleName(), new DataNodeProtocolImpl());
+		DataNodeProtocolImpl dataNodeSvc = new DataNodeProtocolImpl();
+		
+		svcRouter.registerRpcService(DataNodePB.class.getSimpleName(),
+				DatanodeProtocolService.newReflectiveBlockingService(dataNodeSvc));
 		
 	}
 	public void start() throws IOException{

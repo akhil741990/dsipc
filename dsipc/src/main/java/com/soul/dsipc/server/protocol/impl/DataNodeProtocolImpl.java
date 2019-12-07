@@ -14,6 +14,8 @@ public class DataNodeProtocolImpl implements DataNodePB {
 		
 		DataNodeRegistration reg = PBHelper.convert(request.getRegistration());
 		
+		System.out.println("Method invoked");
+		
 		return RegisterDatanodeResponseProto.newBuilder()
         .setRegistration(PBHelper.convert(reg)).build();
 	}
