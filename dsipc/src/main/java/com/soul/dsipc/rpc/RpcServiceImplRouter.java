@@ -30,6 +30,7 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 	Map<String,Object> implMap;
 	private ExecutorService rpcSvcRouterExecutor;
 	BlockingQueue<RpcCall> queue = new LinkedBlockingQueue<RpcCall>(64); //TODO : make size configurable
+	BlockingQueue<RpcCall> respQ = new LinkedBlockingQueue<RpcCall>(64); //TODO : make size configurable
 	
 	public BlockingQueue<RpcCall> getQueue() {
 		return queue;
@@ -54,39 +55,39 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 		while(true){  // TODO : Replace with isRunning
 			
 			try {
-				RpcCall call = queue.take();
-				RequestHeaderProto header = call.getReq().getMessageHeader();
-				String methodName = header.getMethodName();
-				String protoName = header.getDeclaringClassProtocolName();
-				final BlockingService svc = (BlockingService)implMap.get(protoName);
-				final MethodDescriptor methodDescriptor = svc.getDescriptorForType().findMethodByName(methodName);
 				
-				Message prototype = svc.getRequestPrototype(methodDescriptor);
-		        try {
-					final Message param = prototype.newBuilderForType()
-					    .mergeFrom(call.getReq().getMessageBytes()).build();
+				final RpcCall call = queue.take();
 					
-					
-					Future<Message> resp = rpcSvcRouterExecutor.submit(new Callable<Message>() {
-
-						public Message call() throws Exception {
-							Message result = svc.callBlockingMethod(methodDescriptor, null, param);
-							return result;
+					rpcSvcRouterExecutor.execute(new Runnable() {		
+						public void run() {
+							RequestHeaderProto header = call.getReq().getMessageHeader();
+							String methodName = header.getMethodName();
+							String protoName = header.getDeclaringClassProtocolName();
+							final BlockingService svc = (BlockingService)implMap.get(protoName);
+							final MethodDescriptor methodDescriptor = svc.getDescriptorForType().findMethodByName(methodName);
+							
+							Message prototype = svc.getRequestPrototype(methodDescriptor);
+					        try {
+								final Message param = prototype.newBuilderForType()
+								    .mergeFrom(call.getReq().getMessageBytes()).build();
+								Message result = svc.callBlockingMethod(methodDescriptor, null, param);
+								call.setSeverResponse(result);
+								respQ.add(call);
+					        } catch (InvalidProtocolBufferException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ServiceException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
 						}
 					});
 					
 					// Add the following blocking call in a New Thread that dispatches the response 
-					try {
-						Message out = resp.get();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					
-				} catch (InvalidProtocolBufferException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
+					
+				 
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

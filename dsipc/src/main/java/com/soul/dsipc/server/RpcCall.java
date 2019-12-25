@@ -2,16 +2,27 @@ package com.soul.dsipc.server;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
+import java.nio.channels.SocketChannel;
 
+import com.google.protobuf.Message;
 import com.soul.dsipc.rpc.packet.RpcRequestWrapper;
 
 public class RpcCall {
 
 	private RpcRequestWrapper req;
-	private Channel conn;
+	private SocketChannel conn;
 	private ByteBuffer resp;
+	private Message severResponse; // Server Response Object  
 	
-	public RpcCall(RpcRequestWrapper req, Channel conn){
+	public Message getSeverResponse() {
+		return severResponse;
+	}
+
+	public void setSeverResponse(Message severResponse) {
+		this.severResponse = severResponse;
+	}
+
+	public RpcCall(RpcRequestWrapper req, SocketChannel conn){
 		this.req = req;
 		this.conn = conn;
 	}
@@ -19,7 +30,7 @@ public class RpcCall {
 	public RpcRequestWrapper getReq() {
 		return req;
 	}
-	public Channel getConn() {
+	public SocketChannel getConn() {
 		return conn;
 	}
 	public ByteBuffer getResp() {
