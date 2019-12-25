@@ -43,7 +43,7 @@ public class Invoker implements InvocationHandler{
 		this.client.sendRpcRequest(call);;
 				
 		
-		return null;
+		return call.getRpcResponse();
 	}
 	
 	

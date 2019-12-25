@@ -9,10 +9,14 @@ import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.CodedOutputStream;
 import com.soul.dsipc.rpc.packet.DataOutputBuffer;
+import com.soul.dsipc.rpc.packet.RpcResponseWrapper;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcKindProto;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcRequestHeaderProto.OperationProto;
+import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcResponseHeaderProto;
+import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcResponseHeaderProto.RpcStatusProto;
 
 public class Connection {
 
@@ -62,7 +66,10 @@ public class Connection {
 	      }else{
 	    	throw new IOException("Unable to connect to Server"); 
 	      }
-	      // Write d to socket out put stream
+	      
+	      
+	      readResponse(call);
+	      // Read Response
 	}
 	
 	private boolean setUpConnection(InetSocketAddress address) throws IOException{
@@ -79,4 +86,29 @@ public class Connection {
 		this.out = new DataOutputStream(channel.socket().getOutputStream());
 		this.in = new DataInputStream(channel.socket().getInputStream());
 	}
+	
+	private void readResponse(Call call){
+		
+        RpcResponseHeaderProto header;
+		try {
+			int totalLen = in.readInt();
+			header = RpcResponseHeaderProto.parseDelimitedFrom(in);
+			int headerLen = header.getSerializedSize();
+	        headerLen += CodedOutputStream.computeRawVarint32Size(headerLen);
+	        
+	        RpcStatusProto status = header.getStatus();
+	        System.out.println("RpcResponseStatus :" + status);
+	        RpcResponseWrapper respWrapper = new RpcResponseWrapper();
+	        respWrapper.readFields(in);	        
+	        call.setRpcResponse(respWrapper);
+	        
+	        //System.out.println("Response : " + respWrapper);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
+	}
+	
 }

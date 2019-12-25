@@ -38,8 +38,8 @@ public class Client {
 		 RegisterDatanodeRequestProto request = builder.build();
 		
 		try {
-			proxy.registerDatanode(null, request);
-			
+			Object response = proxy.registerDatanode(null, request);
+			System.out.println("Response : " + response);
 			System.out.println("Send Request :");
 			System.out.println("Send Request End:");
 		} catch (ServiceException e) {
