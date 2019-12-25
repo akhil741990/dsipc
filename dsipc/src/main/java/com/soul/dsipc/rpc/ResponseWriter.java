@@ -8,7 +8,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.concurrent.BlockingQueue;
 
-import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
 import com.soul.dsipc.rpc.packet.RpcResponseWrapper;
@@ -16,7 +15,7 @@ import com.soul.dsipc.server.RpcCall;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcResponseHeaderProto;
 import com.soul.hadoop.common.protobuf.RpcHeaderProtos.RpcResponseHeaderProto.RpcStatusProto;
 
-public class ResponseWriter implements Runnable {
+public class ResponseWriter extends Thread {
 
 	/**
 	 * When the read or write buffer size is larger than this limit, i/o will be
@@ -71,7 +70,7 @@ public class ResponseWriter implements Runnable {
 						header.writeDelimitedTo(out);
 						respWrapper.write(out);
 						channelWrite(call.getConn(), ByteBuffer.wrap(buf.toByteArray()));
-						
+						System.out.println("Response sent to client");
 					} catch (IOException e) {
 						// TODO send error response
 						e.printStackTrace();

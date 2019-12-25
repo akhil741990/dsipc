@@ -31,6 +31,7 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 	private ExecutorService rpcSvcRouterExecutor;
 	BlockingQueue<RpcCall> queue = new LinkedBlockingQueue<RpcCall>(64); //TODO : make size configurable
 	BlockingQueue<RpcCall> respQ = new LinkedBlockingQueue<RpcCall>(64); //TODO : make size configurable
+	private ResponseWriter writter;
 	
 	public BlockingQueue<RpcCall> getQueue() {
 		return queue;
@@ -44,6 +45,8 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 	            .setNameFormat("RpcServiceRouter Executor Thread #%d")
 	            .build());
 		//this.isRunning = true;
+		this.writter = new ResponseWriter(respQ);
+		
 	}
 	
 	public void registerRpcService(String rpcName, Object rpcSvc){
@@ -52,6 +55,8 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 
 	public void run() {
 		System.out.println("==========RpcServiceImplRouter==============");
+		this.writter.start();
+		System.out.println("==========ResponseWriter Started==============");
 		while(true){  // TODO : Replace with isRunning
 			
 			try {
@@ -73,6 +78,7 @@ public class RpcServiceImplRouter  extends Thread implements EverRunningComponen
 								Message result = svc.callBlockingMethod(methodDescriptor, null, param);
 								call.setSeverResponse(result);
 								respQ.add(call);
+								System.out.println("Added Response to RespQ ");
 					        } catch (InvalidProtocolBufferException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
