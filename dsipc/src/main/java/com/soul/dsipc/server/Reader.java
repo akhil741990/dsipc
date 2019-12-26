@@ -27,12 +27,16 @@ public class Reader extends Thread implements EverRunningComponent {
 		System.out.println("Reader started");
 		while(isRunning){
 			try {
-				selector.select();
+				selector.select(100);
+				// TODO : Rather than doing a timebound non-blocking select
+				// will it be beneficial to add lock for the selector ??
 				Set<SelectionKey> keys =  selector.selectedKeys();
+				
 				Iterator<SelectionKey> itr = keys.iterator();
+				SelectionKey key = null;
 				while(itr.hasNext()){
 					try{
-						SelectionKey key = itr.next();
+						key = itr.next();
 						SocketChannel client = (SocketChannel) key.channel();
 						
 						if(client.isConnected()){
@@ -47,6 +51,9 @@ public class Reader extends Thread implements EverRunningComponent {
 						}
 					}catch (Exception e) {
 						System.out.println("Error :" + e.getMessage());
+						e.printStackTrace();
+						key.cancel();
+						System.out.println("Deregistering  client:" );
 						break;
 					}
 					

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 import com.google.protobuf.Message;
@@ -23,6 +24,17 @@ public class RpcConnectionHandler {
 	private ByteBuffer dataBuffer;
 	private ByteBuffer headerBuffer;
 	private ByteBuffer dataLengthBuffer;
+	private SelectionKey key;
+	public SelectionKey getKey() {
+		return key;
+	}
+
+
+	public void setKey(SelectionKey key) {
+		this.key = key;
+	}
+
+
 	private int dataLength;
 	public RpcConnectionHandler(SocketChannel channel) {
 		this.channel = channel;
@@ -81,6 +93,9 @@ public class RpcConnectionHandler {
 		    
 		    RpcCall c = new RpcCall(wr, channel);
 		    RpcServer.getServerInstance(null, 0).getQueue().add(c);
+		    
+		    key.cancel(); // un registering the client
+		    //TODO : If in future a lock is added for selection the cancel call must be synchronized
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -25,7 +25,8 @@ public class ConnectionRegistrar extends Thread implements EverRunningComponent 
 				readSelector.wakeup();
 				// Create a RpcConnectionHandler and add as attachment
 				RpcConnectionHandler handler = new RpcConnectionHandler(channel);
-				channel.register(readSelector, SelectionKey.OP_READ, handler);
+				SelectionKey key = channel.register(readSelector, SelectionKey.OP_READ, handler);
+				handler.setKey(key);
 				System.out.println("Registered new connection of READ");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

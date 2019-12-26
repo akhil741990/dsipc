@@ -69,6 +69,7 @@ public class Connection {
 	      
 	      
 	      readResponse(call);
+	      close();
 	      // Read Response
 	}
 	
@@ -109,6 +110,10 @@ public class Connection {
 		}
 
         
+	}
+	
+	public void close() throws IOException{
+		channel.close();
 	}
 	
 }
