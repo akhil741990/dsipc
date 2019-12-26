@@ -14,6 +14,11 @@ public class RpcResponseWrapper implements RpcWrapper{
 	Message theResponse; // for senderSide, the response is here
 	byte[] theResponseRead; // for receiver side, the response is here
 	
+	public byte[] getTheResponseRead() {
+		return theResponseRead;
+	}
+
+
 	public RpcResponseWrapper() {
     }
 
