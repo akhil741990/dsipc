@@ -45,6 +45,12 @@ Here, TestProtocol0 is the Protocol Class / Stub
 public Object invoke(Object proxy, Method method, Object[] args) 
 Inside the invoke method , proxy, method called on the proxy and its parameter are wrapped into a RPC Request and is sent to the RPC Server
 
+https://medium.com/@akhil741990/ipc-in-hadoop-ecosystem-cc7be7f5b92b
 
 
 This project is inspired by apache/hadoop-common github project
+
+
+
+
+
